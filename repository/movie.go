@@ -25,7 +25,7 @@ func NewMovieRepo(apiKey string) model.MovieRepository {
 	}
 }
 
-func (repo *movieRepo) SearchMovies(title string, page uint32) (result model.MovieSearch, err error) {
+func (repo *movieRepo) SearchMovies(title string, page uint32) (result *model.MovieSearch, err error) {
 	url := fmt.Sprintf("%s/?apikey=%s&s=%s&page=%d", host, repo.apiKey, title, page)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -43,7 +43,7 @@ func (repo *movieRepo) SearchMovies(title string, page uint32) (result model.Mov
 		return result, err
 	}
 
-	err = json.Unmarshal(body, &result)
+	err = json.Unmarshal(body, result)
 	if err != nil {
 		return result, err
 	}
@@ -51,7 +51,7 @@ func (repo *movieRepo) SearchMovies(title string, page uint32) (result model.Mov
 	return result, nil
 }
 
-func (repo *movieRepo) GetMovieDetailByID(id string) (detail model.MovieDetail, err error) {
+func (repo *movieRepo) GetMovieDetailByID(id string) (detail *model.MovieDetail, err error) {
 	url := fmt.Sprintf("%s/?apikey=%s&i=%s", host, repo.apiKey, id)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -69,7 +69,7 @@ func (repo *movieRepo) GetMovieDetailByID(id string) (detail model.MovieDetail, 
 		return detail, err
 	}
 
-	err = json.Unmarshal(body, &detail)
+	err = json.Unmarshal(body, detail)
 	if err != nil {
 		return detail, err
 	}

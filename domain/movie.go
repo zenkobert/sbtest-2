@@ -48,9 +48,11 @@ type (
 )
 
 type MovieRepository interface {
-	SearchMovies(title string, page uint32) (result MovieSearch, err error)
-	GetMovieDetailByID(id string) (detail MovieDetail, err error)
+	SearchMovies(title string, page uint32) (result *MovieSearch, err error)
+	GetMovieDetailByID(id string) (detail *MovieDetail, err error)
 }
 
 type MovieUsecase interface {
+	SearchMovies(title string, page uint32) (result *MovieSearch, err error)
+	GetMovieDetailByID(id string) (detail *MovieDetail, err error)
 }
