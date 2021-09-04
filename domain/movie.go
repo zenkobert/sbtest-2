@@ -11,6 +11,7 @@ type (
 		} `json:"Search"`
 		TotalResults string `json:"totalResults"`
 		Response     string `json:"Response"`
+		Error        string `json:"Error"`
 	}
 
 	MovieDetail struct {
@@ -42,10 +43,13 @@ type (
 		Production string `json:"Production"`
 		Website    string `json:"Website"`
 		Response   string `json:"Response"`
+		Error      string `json:"Error"`
 	}
 )
 
 type MovieRepository interface {
+	SearchMovies(title string, page uint32) (result MovieSearch, err error)
+	GetMovieDetailByID(id string) (detail MovieDetail, err error)
 }
 
 type MovieUsecase interface {
