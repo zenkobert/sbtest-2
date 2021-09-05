@@ -57,7 +57,7 @@ message GetMovieDetailResponse {
     string website = 24;
 }
 
-service SearchMovieService {
+service SearchMovie {
     rpc SearchMovie(SearchMovieRequest) returns (SearchMovieResponse);
     rpc GetMovieDetail(GetMovieDetailRequest) returns (GetMovieDetailResponse);
 }
