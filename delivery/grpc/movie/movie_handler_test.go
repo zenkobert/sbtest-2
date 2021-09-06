@@ -44,6 +44,24 @@ func TestSearchMovie(t *testing.T) {
 		assert.Equal(t, "iron+man", req.Searchword)
 	})
 
+	t.Run("[SearchMovie] IF searchword is null, RETURN InvalidArgument error", func(t *testing.T) {
+		movieUsecaseMock := &mock.MovieUsecase{}
+		movieUsecaseMock.On("SearchMovies", testify.Anything, testify.Anything).Return(&model.MovieSearch{}, nil)
+
+		serv := &movieServer{movieUsecaseMock}
+		req := &SearchMovieRequest{
+			Pagination: 1,
+			Searchword: "",
+		}
+
+		_, err := serv.SearchMovie(todoContext, req)
+		if assert.Error(t, err) {
+			st, _ := status.FromError(err)
+			assert.Equal(t, st.Code(), codes.InvalidArgument)
+		}
+
+	})
+
 	t.Run("[SearchMovie] MovieUsecase return an error", func(t *testing.T) {
 		errMsg := "Oops, something happened"
 
@@ -51,7 +69,7 @@ func TestSearchMovie(t *testing.T) {
 		movieUsecaseMock.On("SearchMovies", testify.Anything, testify.Anything).Return(&model.MovieSearch{}, errors.New(errMsg))
 
 		serv := &movieServer{movieUsecaseMock}
-		req := &SearchMovieRequest{}
+		req := &SearchMovieRequest{Searchword: "ironman"}
 
 		expectedErr := status.Error(codes.Internal, errMsg)
 		_, actualErr := serv.SearchMovie(todoContext, req)
@@ -65,7 +83,7 @@ func TestSearchMovie(t *testing.T) {
 		movieUsecaseMock.On("SearchMovies", testify.Anything, testify.Anything).Return(&model.MovieSearch{Error: "error"}, nil)
 
 		serv := &movieServer{movieUsecaseMock}
-		req := &SearchMovieRequest{}
+		req := &SearchMovieRequest{Searchword: "ironman"}
 
 		_, actualErr := serv.SearchMovie(todoContext, req)
 		if assert.Error(t, actualErr) {
@@ -85,7 +103,7 @@ func TestSearchMovie(t *testing.T) {
 
 		serv := &movieServer{movieUsecaseMock}
 
-		actualResult, _ := serv.SearchMovie(todoContext, &SearchMovieRequest{})
+		actualResult, _ := serv.SearchMovie(todoContext, &SearchMovieRequest{Searchword: "ironman"})
 		assert.Equal(t, serv.convertMovieSearchToRPCResponse(movieSearchResult), actualResult)
 	})
 }

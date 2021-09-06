@@ -31,6 +31,10 @@ func (serv *movieServer) SearchMovie(ctx context.Context, req *SearchMovieReques
 		req.Pagination = 1
 	}
 
+	if req.Searchword == "" {
+		return resp, status.Error(codes.InvalidArgument, "please specify a searchword param")
+	}
+
 	req.Searchword = url.QueryEscape(req.Searchword)
 
 	movieSearch, err := serv.MovieUsecase.SearchMovies(req.Searchword, uint32(req.Pagination))
