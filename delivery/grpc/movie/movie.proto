@@ -1,6 +1,8 @@
 syntax = "proto3";
 package movie;
 
+import "google/api/annotations.proto";
+
 option go_package = "delivery/grpc/movie";
 
 message Search {
@@ -58,6 +60,15 @@ message GetMovieDetailResponse {
 }
 
 service SearchMovie {
-    rpc SearchMovie(SearchMovieRequest) returns (SearchMovieResponse);
-    rpc GetMovieDetail(GetMovieDetailRequest) returns (GetMovieDetailResponse);
+    rpc SearchMovie(SearchMovieRequest) returns (SearchMovieResponse) {
+        option (google.api.http) = {
+            get: "/v1/movies"
+        };
+    };
+
+    rpc GetMovieDetail(GetMovieDetailRequest) returns (GetMovieDetailResponse) {
+        option (google.api.http) = {
+            get: "/v1/movies/{id}"
+        };
+    };
 }
