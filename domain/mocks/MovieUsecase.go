@@ -35,6 +35,20 @@ func (_m *MovieUsecase) GetMovieDetailByID(id string) (*model.MovieDetail, error
 	return r0, r1
 }
 
+// LogToDB provides a mock function with given fields: record
+func (_m *MovieUsecase) LogToDB(record string) error {
+	ret := _m.Called(record)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string) error); ok {
+		r0 = rf(record)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // SearchMovies provides a mock function with given fields: title, page
 func (_m *MovieUsecase) SearchMovies(title string, page uint32) (*model.MovieSearch, error) {
 	ret := _m.Called(title, page)
