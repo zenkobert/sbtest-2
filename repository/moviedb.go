@@ -5,14 +5,16 @@ import (
 	"os"
 )
 
-type movieDB struct{}
+type movieDB struct {
+	fileName string
+}
 
-func NewMovieDB() movieDB {
-	return movieDB{}
+func NewMovieDB(fileName string) movieDB {
+	return movieDB{fileName: fileName}
 }
 
 func (db *movieDB) Log(record string) error {
-	f, err := os.OpenFile("search.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(db.fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Println(err)
 		return err

@@ -50,7 +50,7 @@ func main() {
 
 func startGrpcServer() error {
 	movieRepo := repo.NewMovieRepo(apiKey)
-	movieDB := repo.NewMovieDB()
+	movieDB := repo.NewMovieDB("search.log")
 	movieUsecase := usecase.NewMovieUsecase(movieRepo, &movieDB)
 	movieServer := server.NewMovieServer(movieUsecase)
 	interceptor := mw.NewInterceptor(movieUsecase)
