@@ -1,4 +1,4 @@
-package movie
+package usecase
 
 import (
 	model "github.com/zenkobert/sbtest-2/domain"
