@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	server "github.com/zenkobert/sbtest-2/delivery/grpc/movie"
+	server "github.com/zenkobert/sbtest-2/delivery/grpc"
 	repo "github.com/zenkobert/sbtest-2/repository"
 	usecase "github.com/zenkobert/sbtest-2/usecase"
 	"golang.org/x/sync/errgroup"

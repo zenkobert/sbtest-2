@@ -3,7 +3,7 @@ package movie;
 
 import "google/api/annotations.proto";
 
-option go_package = "delivery/grpc/movie";
+option go_package = "delivery/grpc";
 
 message Search {
     string title = 1;

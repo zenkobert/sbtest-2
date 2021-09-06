@@ -1,4 +1,4 @@
-package movie
+package grpc
 
 import (
 	"context"
