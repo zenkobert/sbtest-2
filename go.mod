@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
+	github.com/joho/godotenv v1.3.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/net v0.0.0-20210903162142-ad29c8ab022f // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
