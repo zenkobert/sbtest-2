@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	testify "github.com/stretchr/testify/mock"
-	commonMock "github.com/zenkobert/sbtest-2/common/mocks"
 	model "github.com/zenkobert/sbtest-2/domain"
 	"github.com/zenkobert/sbtest-2/domain/mocks"
 )
@@ -15,10 +14,9 @@ func TestNewMovieUsecase(t *testing.T) {
 	t.Run("[NewMovieUsecase]", func(t *testing.T) {
 		expected := &movieUsecase{
 			MovieRepo: &mocks.MovieRepository{},
-			MovieDB:   &commonMock.DummyDB{},
 		}
 
-		actual := NewMovieUsecase(&mocks.MovieRepository{}, &commonMock.DummyDB{})
+		actual := NewMovieUsecase(&mocks.MovieRepository{})
 		assert.Equal(t, expected, actual)
 	})
 }
@@ -26,11 +24,9 @@ func TestNewMovieUsecase(t *testing.T) {
 func TestSearchMovies(t *testing.T) {
 	t.Run("[SearchMovies] movieRepo returns error", func(t *testing.T) {
 		movieRepoMock := &mocks.MovieRepository{}
-		movieDBMock := &commonMock.DummyDB{}
 		movieRepoMock.On("SearchMovies", testify.Anything, testify.Anything).Return(&model.MovieSearch{}, errors.New("error"))
-		movieDBMock.On("Log", testify.Anything).Return(nil)
 
-		usecase := NewMovieUsecase(movieRepoMock, movieDBMock)
+		usecase := NewMovieUsecase(movieRepoMock)
 		_, err := usecase.SearchMovies("test", 1)
 		if assert.Error(t, err) {
 			assert.Equal(t, "error", err.Error())
@@ -47,11 +43,9 @@ func TestSearchMovies(t *testing.T) {
 		}
 
 		movieRepoMock := &mocks.MovieRepository{}
-		movieDBMock := &commonMock.DummyDB{}
 		movieRepoMock.On("SearchMovies", testify.Anything, testify.Anything).Return(expectedResult, nil)
-		movieDBMock.On("Log", testify.Anything).Return(nil)
 
-		usecase := NewMovieUsecase(movieRepoMock, movieDBMock)
+		usecase := NewMovieUsecase(movieRepoMock)
 		result, err := usecase.SearchMovies("test", 1)
 		if assert.Nil(t, err) {
 			assert.Equal(t, expectedResult, result)
@@ -62,11 +56,9 @@ func TestSearchMovies(t *testing.T) {
 func TestGetMovieDetailByID(t *testing.T) {
 	t.Run("[GetMovieDetailByID] movieRepo returns error", func(t *testing.T) {
 		movieRepoMock := &mocks.MovieRepository{}
-		movieDBMock := &commonMock.DummyDB{}
 		movieRepoMock.On("GetMovieDetailByID", testify.Anything).Return(&model.MovieDetail{}, errors.New("error"))
-		movieDBMock.On("Log", testify.Anything).Return(nil)
 
-		usecase := NewMovieUsecase(movieRepoMock, movieDBMock)
+		usecase := NewMovieUsecase(movieRepoMock)
 		_, err := usecase.GetMovieDetailByID("id")
 		if assert.Error(t, err) {
 			assert.Equal(t, "error", err.Error())
@@ -84,26 +76,12 @@ func TestGetMovieDetailByID(t *testing.T) {
 		}
 
 		movieRepoMock := &mocks.MovieRepository{}
-		movieDBMock := &commonMock.DummyDB{}
 		movieRepoMock.On("GetMovieDetailByID", testify.Anything).Return(expectedResult, nil)
-		movieDBMock.On("Log", testify.Anything).Return(nil)
 
-		usecase := NewMovieUsecase(movieRepoMock, movieDBMock)
+		usecase := NewMovieUsecase(movieRepoMock)
 		result, err := usecase.GetMovieDetailByID("id")
 		if assert.Nil(t, err) {
 			assert.Equal(t, expectedResult, result)
 		}
-	})
-}
-
-func TestLogToDB(t *testing.T) {
-	t.Run("[logToDB] return error", func(t *testing.T) {
-		movieRepoMock := &mocks.MovieRepository{}
-		movieDBMock := &commonMock.DummyDB{}
-		movieDBMock.On("Log", testify.Anything).Return(errors.New("error"))
-
-		usecase := movieUsecase{movieRepoMock, movieDBMock}
-		err := usecase.logToDB("")
-		assert.Error(t, err)
 	})
 }
