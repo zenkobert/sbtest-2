@@ -58,4 +58,5 @@ type MovieRepository interface {
 type MovieUsecase interface {
 	SearchMovies(title string, page uint32) (result *MovieSearch, err error)
 	GetMovieDetailByID(id string) (detail *MovieDetail, err error)
+	LogToDB(record string) error
 }

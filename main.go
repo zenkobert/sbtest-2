@@ -11,6 +11,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/joho/godotenv"
 	server "github.com/zenkobert/sbtest-2/delivery/grpc"
+	mw "github.com/zenkobert/sbtest-2/delivery/middleware"
 	repo "github.com/zenkobert/sbtest-2/repository"
 	usecase "github.com/zenkobert/sbtest-2/usecase"
 	"golang.org/x/sync/errgroup"
@@ -49,10 +50,12 @@ func main() {
 
 func startGrpcServer() error {
 	movieRepo := repo.NewMovieRepo(apiKey)
-	movieUsecase := usecase.NewMovieUsecase(movieRepo)
+	movieDB := repo.NewMovieDB()
+	movieUsecase := usecase.NewMovieUsecase(movieRepo, &movieDB)
 	movieServer := server.NewMovieServer(movieUsecase)
+	interceptor := mw.NewInterceptor(movieUsecase)
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(interceptor.Unary()))
 	server.RegisterSearchMovieServer(grpcServer, movieServer)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
