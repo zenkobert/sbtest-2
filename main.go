@@ -55,7 +55,7 @@ func startGrpcServer() error {
 	movieServer := server.NewMovieServer(movieUsecase)
 	interceptor := mw.NewInterceptor(movieUsecase)
 
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(interceptor.Unary()))
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(interceptor.Unary))
 	server.RegisterSearchMovieServer(grpcServer, movieServer)
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
