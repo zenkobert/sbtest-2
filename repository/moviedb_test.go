@@ -2,15 +2,17 @@ package repository
 
 import (
 	"os"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewMovieDB(t *testing.T) {
+	mutex := &sync.Mutex{}
 	t.Run("[NewMovieDB]", func(t *testing.T) {
 		fileName := "search.log"
-		assert.Equal(t, movieDB{fileName: fileName}, NewMovieDB(fileName))
+		assert.Equal(t, movieDB{fileName: fileName, mutex: mutex}, NewMovieDB(fileName))
 	})
 }
 
